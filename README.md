@@ -86,9 +86,9 @@ insert into user(id, username, password, nickname, email, age, head) values (1, 
 ## 数据字典：学生毕业年份
 insert into setting(id, user_id, batch_number) values (1, 1, 8);
 
-insert into award(name, count, award, setting_id) values ('特靠谱欢乐奖', 1, '深圳湾一号', 1);
-insert into award(name, count, award, setting_id) values ('特靠谱娱乐奖', 5, 'BMW X5', 1);
-insert into award(name, count, award, setting_id) values ('特靠谱励志奖', 20, '办公室一日游', 1);
+insert into award(name, count, award, setting_id) values ('欢乐奖', 1, '上海房产一套', 1);
+insert into award(name, count, award, setting_id) values ('娱乐奖', 5, '保时捷', 1);
+insert into award(name, count, award, setting_id) values ('励志奖', 20, '祝福语', 1);
 
 ## 数据字典：学生专业
 insert into member(name, no, user_id) values ('李寻欢', '水果刀', 1);
@@ -190,10 +190,6 @@ insert into member(name, no, user_id) values ('回访波', 'no90', 1);
 ```
 ## 前后端接口
 
-要实现功能，需要先明确前后端约定好的接口。
-
-需要说明的是，接口的定义一般是前后端约定好的，所以也和前端代码息息相关，前端需要什么数据，需要什么格式的数据，也会在接口中体现。
-
 接口主要体现在
 
 + 请求需要的信息：请求方法，请求路径，请求数据
@@ -207,7 +203,7 @@ insert into member(name, no, user_id) values ('回访波', 'no90', 1);
 POST api/user/login
 Content-Type: application/json
 
-{username: "bit", password: "123"}
+{username: "listen", password: "123456"}
 ```
 
 响应
@@ -226,15 +222,13 @@ Content-Type: application/json
 POST api/user/register
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundarypOUwkGIMUyL0aOZT
 
-username: haha
-password: 111
-nickname: 牛牛牛
+username: listen
+password: 123456
+nickname: yaya
 email: 666@163.com
 age: 66
 headFile: (binary)
 ```
-
-注意：以上请求数据是解析过的，http原生发送的数据还包含其他很多内容，比较多，可以动手抓包看看。其中boundary后边的是随机生成的，请求数据中会使用该信息。
 
 响应
 
@@ -264,36 +258,36 @@ GET api/setting/query
     "createTime" : "2020-08-14 08:16:31",
     "user" : {
       "id" : 1,
-      "username" : "bit",
-      "password" : "123",
-      "nickname" : "小比特",
+      "username" : "listen",
+      "password" : "123456",
+      "nickname" : "yaya",
       "email" : "1111@163.com",
       "age" : 18,
       "head" : "img/test-head.jpg",
-      "createTime" : "2020-08-14 08:16:31",
+      "createTime" : "2020-011-4 08:16:31",
       "settingId" : 1
     },
     "awards" : [ {
       "id" : 1,
-      "name" : "特靠谱欢乐奖",
+      "name" : "欢乐奖",
       "count" : 1,
-      "award" : "深圳湾一号",
+      "award" : "上海房产一套
       "settingId" : 1,
       "createTime" : "2020-08-14 08:16:31",
       "luckyMemberIds" : [ 5 ]
     }, {
       "id" : 2,
-      "name" : "特靠谱娱乐奖",
+      "name" : "娱乐奖",
       "count" : 5,
-      "award" : "BMW X5",
+      "award" : "保时捷
       "settingId" : 1,
       "createTime" : "2020-08-14 08:16:31",
       "luckyMemberIds" : [ 56, 40, 32, 65, 81 ]
     }, {
       "id" : 3,
-      "name" : "特靠谱励志奖",
+      "name" : "励志奖",
       "count" : 20,
-      "award" : "办公室一日游",
+      "award" : "祝福语
       "settingId" : 1,
       "createTime" : "2020-08-14 08:16:31",
       "luckyMemberIds" : [ 48, 68, 43, 73, 13, 83, 63, 25 ]
@@ -347,7 +341,7 @@ GET api/setting/update?batchNumber=5
 POST api/award/add
 Content-Type: application/json
 
-{name: "牛哄哄", count: 3, award: "华为手机"}
+{name: "哇哦", count: 3, award: "华为手机"}
 ```
 
 响应
@@ -365,7 +359,7 @@ Content-Type: application/json
 POST api/award/update
 Content-Type: application/json
 
-{name: "牛哄哄", count: 3, award: "小米手机", id: 4}
+{name: "哇哦", count: 3, award: "小米手机", id: 4}
 ```
 
 响应
@@ -438,8 +432,6 @@ Content-Type: application/json
 ```
 GET api/member/delete/97
 ```
-
-注意最后的数字为抽奖人员的id
 
 响应
 
@@ -678,17 +670,7 @@ public class DemoApplication {
 }
 ```
 
-
-
-### 准备前端资源
-
-### 准备Mybatis代码生成工具所需资源
-
 ## 代码设计
-
-### 设计数据库实体类
-
-### 设计http请求基类
 
 ### 设计统一响应类
 
@@ -732,14 +714,6 @@ public class ResponseResult {
 ### 设计自定义异常类型
 
 主要针对不同的场景，需要抛异常来处理时，能定位业务含义
-
-主要分为
-
-1. 客户端请求错误时的异常：需要给定错误码，方便前端提示用户，如用户名存在不允许注册（只简单实现，不考虑具体字段的报错）
-
-2. 业务发生错误时的异常：需要给定错误码，方便后端定位问题，一般如程序上的业务错误都可以抛（BUG）
-
-3. 系统发生错误时的异常：需要给定错误码，方便后端定位问题，程序出错，如数据库连接获取失败都可以抛（一般是系统发生错误，如网络断了，数据库挂了等等）
 
 
 先定义异常的基类：抛异常时，有时候是自己抛，有时候是捕获到异常，再往外抛，所以提供两个构造方法
@@ -880,32 +854,61 @@ public class ExceptionAdvisor {
 ### 设计会话管理的拦截器及统一数据响应配置
 
 ```java
-import org.springframework.web.servlet.HandlerInterceptor;
+package com.luckyBoy.config.mvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luckyBoy.base.ResponseResult;
+import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+/**
+ * Created with IntelliJ IDEA.
+ * Description: If you don't work hard, you will be a loser.
+ * 会话管理的路径拦截器
+ * User: Listen-Y.
+ * Date: 2021-01-03
+ * Time: 10:52
+ */
 
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         HttpSession session = request.getSession(false);
-        //登录校验
-        if(session != null && session.getAttribute("user") != null){
+        if (session != null && session.getAttribute("user") != null) {
+            //进行了登录 可以执行Controller中的方法
             return true;
         }
-        response.setStatus(401);
+        if (request.getRequestURI().contains("js") || request.getRequestURI().contains("css")
+        || request.getRequestURI().contains("img") || request.getRequestURI().contains("3rd")) {
+            //访问静态资源就放行
+            return true;
+        }
+        //说明此时没有进行登录
+        //不容许执行Controller中的方法
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        ResponseResult responseResult = new ResponseResult();
+        responseResult.setCode("SYS000");
+        responseResult.setMessage("未进行登录");
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonStr = mapper.writeValueAsString(responseResult);
+        response.getWriter().write(jsonStr);
+        response.getWriter().flush();
+        response.sendRedirect("index.html");
         return false;
     }
 }
+
 ```
 
 设计Web统一处理的配置
 
 1. 会话管理的拦截器要引入配置：只拦截后端服务路径，并排除登录、注册、注销接口
 2. 后端服务器路径都有/api的前缀，可以加上统一的路径映射
-3. 统一的响应数据格式封装：这里不使用`@ControllerAdvice`和`ResponseBodyAdvice`进行拦截，原因是，返回值为null，会出现无法统一包装，响应体为空
 
 ```java
 import frank.config.interceptor.LoginInterceptor;
@@ -988,35 +991,6 @@ public class RequestResponseBodyMethodProcessorWrapper implements HandlerMethodR
         }
         delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
     }
-}
-```
-
-### 设计Mybatis中Mapper的基类
-
-使用Mybatis的接口方法，所有接口方法都是类似，只是传入参数和返回值不同，可以考虑设计统一的基类，以泛型的方式定义出不同的参数类型、返回类型
-
-```java
-public interface BaseMapper<T extends BaseEntity>{
-
-    T selectByPrimaryKey(Integer id);
-
-    int insert(T record);
-
-    int insertSelective(T record);
-
-    int updateByPrimaryKeySelective(T record);
-
-    int updateByPrimaryKey(T record);
-
-    int deleteByPrimaryKey(Integer id);
-
-    T selectOne(T record);
-
-    List<T> selectAll();
-
-    List<T> selectByCondition(T record);
-
-    int deleteByIds(List<Integer> ids);
 }
 ```
 

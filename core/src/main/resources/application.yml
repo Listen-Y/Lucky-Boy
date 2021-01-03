@@ -28,7 +28,16 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-
+    # JSON数据设置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+    # MVC配置
+  mvc:
+    format:
+      date: yyyy-MM-dd HH:mm:ss
+    throw-exception-if-no-handler-found: true
 
 mybatis:
   type-aliases-package: com.luckyBoy.model

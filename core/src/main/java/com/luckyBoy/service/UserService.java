@@ -73,7 +73,7 @@ public class UserService {
         //用户创建完成还要
         Setting setting = new Setting();
         setting.setUserId(user.getId());
-        setting.setBatchNumber(0);
+        setting.setBatchNumber(1);
         settingService.add(setting);
 
         //保存头像文件到服务器文件夹

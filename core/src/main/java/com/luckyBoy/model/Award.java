@@ -23,7 +23,7 @@ public class Award {
     private String name;
 
     /**
-     * 奖项人数
+     * 奖品数量
      */
     private Integer count;
 

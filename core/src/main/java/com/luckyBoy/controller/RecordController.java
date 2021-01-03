@@ -23,7 +23,7 @@ public class RecordController {
     @Autowired
     private RecordService recordService;
 
-    //抽奖 设计抽奖人员
+    //记录获奖人员
     @PostMapping(value = "add/{awardId}")
     public Object add(@PathVariable Integer awardId, @RequestBody List<Integer> memberIds) {
         recordService.add(awardId, memberIds);
